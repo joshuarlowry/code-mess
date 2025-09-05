@@ -1,0 +1,32 @@
+{
+  "name": "workspace",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "preview": "npx serve dist -l 5173"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joshuarlowry/code-mess.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/joshuarlowry/code-mess/issues"
+  },
+  "homepage": "https://github.com/joshuarlowry/code-mess#readme",
+  "dependencies": {
+    "fast-glob": "^3.3.3",
+    "gray-matter": "^4.0.3",
+    "katex": "^0.16.22",
+    "marked": "^16.2.1",
+    "sanitize-html": "^2.17.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.9",
+    "vite": "^7.1.4"
+  }
+}
