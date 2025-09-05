@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>A SINGLE REASON</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg: #0b1020; --panel:#111833; --text:#e7ecff; --muted:#98a2b3; --brand:#7c9aff; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); }
+    a { color: inherit; text-decoration: none; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+    header { display:flex; align-items:center; justify-content:space-between; gap:16px; padding: 16px 0; }
+    header .brand { font-weight: 800; letter-spacing: 0.3px; font-size: 20px; color: var(--brand); }
+    nav a { margin-right: 16px; opacity: 0.9; }
+    .grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+    .card { background: var(--panel); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 16px; transition: transform .15s ease, box-shadow .15s ease; }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.25); }
+    .badge { display:inline-block; padding: 4px 10px; border-radius:999px; font-size:12px; opacity:0.95; background:#1f2a4d; color:#c9d6ff; border:1px solid rgba(255,255,255,0.06); }
+    .title { font-weight: 700; margin: 6px 0 8px; font-size: 18px; }
+    .muted { color: var(--muted); font-size: 13px; }
+    .pill { display:inline-flex; align-items:center; gap:8px; font-size:12px; padding:4px 10px; border-radius:999px; border:1px solid rgba(255,255,255,0.06); background:#0f1733; color:#c6d0ff; }
+    .toolbar { display:flex; gap:12px; align-items:center; margin: 12px 0 18px; }
+    input[type="search"], select { background:#0e1530; color:#e7ecff; border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:10px 12px; width:100%; }
+    .content { line-height: 1.75; }
+    .content h1, .content h2, .content h3 { margin-top: 1.2em; }
+    .content p { margin: 0.75em 0; }
+    .btn { display:inline-flex; align-items:center; gap:8px; background:#1b254b; color:#dbe5ff; border:1px solid rgba(255,255,255,0.08); padding:10px 14px; border-radius:10px; }
+    .center { text-align:center; }
+    .back { margin: 8px 0 18px; display:inline-block; }
+    .poem-line { font-size: 34px; font-weight: 800; letter-spacing: .3px; }
+    .poem-em { color: #fff; text-shadow: 0 0 0 rgba(255,255,255,0.2); }
+    .slide { min-height: 50vh; display:flex; align-items:center; justify-content:center; padding: 40px 16px; text-align:center; }
+    .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: 12px; padding: 2px 6px; border:1px solid rgba(255,255,255,0.2); border-bottom-width:2px; border-radius:6px; background:#0b122b; }
+  </style>
+  
+</head>
+<body>
+  <div class="container">
+    <header>
+      <a class="brand" href="/index.html">Knowledge Garden</a>
+      <nav>
+        <a href="/lessons/index.html">Lessons</a>
+        <a href="/poems/index.html">Poems</a>
+      </nav>
+    </header>
+    <a class="back" href="/lessons/index.html">← Back to lessons</a>
+<div class="pill">Category: SRP</div>
+<div class="content"><p>This is the essence of the Single Responsibility Principle (SRP). If a class needs to change for more than one reason (e.g., fixing a calculation and changing a database connection), it&#39;s likely doing too much. Splitting it allows you to make focused, safe changes.</p>
+<p>When you need to modify a class, you should be able to clearly identify why the change is necessary and be confident that the change won&#39;t affect unrelated functionality. If you find yourself worried about breaking something seemingly unrelated, it&#39;s a sign the class has too many responsibilities.</p>
+<p>The &quot;reason to change&quot; is often tied to different stakeholders or business requirements. A class that handles both user interface concerns and business logic will change when UI requirements change AND when business rules change—that&#39;s two reasons, which violates SRP.</p>
+<p>To identify multiple reasons for change, ask yourself: &quot;Who would request changes to this class?&quot; If the answer includes multiple roles (UI designer, business analyst, database administrator), you likely have multiple responsibilities that should be separated.</p>
+<p>Another technique is to examine your class&#39;s imports and dependencies. If a class imports both UI frameworks and database libraries, it&#39;s probably handling both presentation and persistence concerns. Similarly, if unit tests for a class require mocking many different types of dependencies, it&#39;s a strong indicator of multiple responsibilities.</p>
+<p>When refactoring to achieve single responsibility, start by identifying the different &quot;actors&quot; or stakeholders who might request changes. Create separate classes for each actor&#39;s concerns, then use composition or dependency injection to coordinate between them when necessary.</p>
+</div>
+  </div>
+  
+</body>
+</html>
