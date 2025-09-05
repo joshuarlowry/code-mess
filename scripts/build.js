@@ -220,6 +220,15 @@ function build() {
 	});
 	writeFile(path.join(DIST_DIR, 'index.html'), home);
 
+	// Local preview server config (for `npx serve`): ensure /lessons and /poems resolve
+	const serveConfig = {
+		rewrites: [
+			{ source: '/lessons', destination: '/lessons/index.html' },
+			{ source: '/poems', destination: '/poems/index.html' }
+		]
+	};
+	writeFile(path.join(DIST_DIR, 'serve.json'), JSON.stringify(serveConfig, null, 2));
+
 	console.log('Built site to', DIST_DIR);
 }
 
