@@ -88,7 +88,7 @@ function baseLayout({ title, body, extraHead = '', extraScript = '' }) {
     .center { text-align:center; }
     .back { margin: 8px 0 18px; display:inline-block; }
     .poem-line { font-size: 34px; font-weight: 800; letter-spacing: .3px; }
-    .poem-em { color: #fff; text-shadow: 0 0 0 rgba(255,255,255,0.2); }
+    .poem-em { color: #7c9aff; font-weight: 900; text-shadow: 0 0 8px rgba(124,154,255,0.4), 0 0 16px rgba(124,154,255,0.2); }
     .slide { min-height: 50vh; display:flex; align-items:center; justify-content:center; padding: 40px 16px; text-align:center; }
     .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: 12px; padding: 2px 6px; border:1px solid rgba(255,255,255,0.2); border-bottom-width:2px; border-radius:6px; background:#0b122b; }
   </style>
@@ -133,6 +133,7 @@ function indexPage({ title, items, filters = [] }) {
 
 function lessonPage({ title, html, category }) {
 	const body = `<a class="back" href="${withBase('/lessons/index.html')}">← Back to lessons</a>
+<h1 style="margin: 0 0 16px 0; font-size: 32px; font-weight: 800; color: var(--brand);">${title}</h1>
 <div class="pill">Category: ${category || 'General'}</div>
 <div class="content">${html}</div>`;
 	return baseLayout({ title, body });
