@@ -25,8 +25,17 @@ jobs:
       - name: Install dependencies
         run: npm ci || npm i
 
+      - name: Detect Pages base path
+        id: base
+        run: |
+          REPO_NAME=${GITHUB_REPOSITORY#*/}
+          if [[ "${{ github.repository_owner }}.github.io" == "${REPO_NAME}" ]]; then
+            echo "BASE_PATH=" >> $GITHUB_OUTPUT
+          else
+            echo "BASE_PATH=/${REPO_NAME}" >> $GITHUB_OUTPUT
+          fi
       - name: Build
-        run: npm run build
+        run: BASE_PATH=${{ steps.base.outputs.BASE_PATH }} npm run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

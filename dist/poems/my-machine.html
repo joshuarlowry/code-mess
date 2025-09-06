@@ -41,13 +41,13 @@
 <body>
   <div class="container">
     <header>
-      <a class="brand" href="/index.html">Knowledge Garden</a>
+      <a class="brand" href="/code-mess/index.html">Knowledge Garden</a>
       <nav>
-        <a href="/lessons/index.html">Lessons</a>
-        <a href="/poems/index.html">Poems</a>
+        <a href="/code-mess/lessons/index.html">Lessons</a>
+        <a href="/code-mess/poems/index.html">Poems</a>
       </nav>
     </header>
-    <a class="back" href="/poems/index.html">← Back to poems</a>
+    <a class="back" href="/code-mess/poems/index.html">← Back to poems</a>
 <div class="center muted">Press <span class="kbd">Space</span> or click to advance</div>
 <div id="slide" class="slide"></div>
   </div>
@@ -59,8 +59,8 @@
   function render(){
     if(i >= lines.length){ el.innerHTML = '<div class="muted">End</div>'; return; }
     const raw = lines[i];
-    const html = raw.replace(/**([^*]+)**/g, '<span class="poem-em"><b>$1</b></span>');
-    el.innerHTML = '<div class="poem-line">' + html + '</div>';
+    const html = raw.replace(/\*\*([^*]+)\*\*/g, '<span class="poem-em"><b>$1<\/b><\/span>');
+    el.innerHTML = '<div class="poem-line">' + html + '<\/div>';
   }
   function advance(){ i = Math.min(i+1, lines.length); render(); }
   function back(){ i = Math.max(i-1, 0); render(); }

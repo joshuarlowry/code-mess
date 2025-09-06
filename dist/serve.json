@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/lessons",
+      "destination": "/lessons/index.html"
+    },
+    {
+      "source": "/poems",
+      "destination": "/poems/index.html"
+    }
+  ]
+}

@@ -9,6 +9,12 @@ const ROOT_DIR = path.resolve(__dirname, '..');
 const CONTENT_DIR_LESSONS = path.join(ROOT_DIR, 'lessons');
 const CONTENT_DIR_POEMS = path.join(ROOT_DIR, 'poems');
 const DIST_DIR = path.join(ROOT_DIR, 'dist');
+// Support a base path (e.g., GitHub Pages project sites like /repo-name)
+const BASE_PATH = String(process.env.BASE_PATH || '').replace(/\/+$/, '');
+function withBase(p) {
+	const rel = p.startsWith('/') ? p : `/${p}`;
+	return `${BASE_PATH}${rel}`;
+}
 
 function ensureDir(dirPath) {
 	fs.mkdirSync(dirPath, { recursive: true });
@@ -91,10 +97,10 @@ function baseLayout({ title, body, extraHead = '', extraScript = '' }) {
 <body>
   <div class="container">
     <header>
-      <a class="brand" href="/index.html">Knowledge Garden</a>
+      <a class="brand" href="${withBase('/index.html')}">Knowledge Garden</a>
       <nav>
-        <a href="/lessons/index.html">Lessons</a>
-        <a href="/poems/index.html">Poems</a>
+        <a href="${withBase('/lessons/index.html')}">Lessons</a>
+        <a href="${withBase('/poems/index.html')}">Poems</a>
       </nav>
     </header>
     ${body}
@@ -121,12 +127,12 @@ function indexPage({ title, items, filters = [] }) {
   </select>
 </div>`;
 	const cards = `<div id="cards" class="grid">${items.map(renderCard).join('\n')}</div>`;
-	const script = `<script>\n(function(){\n  const search = document.getElementById('search');\n  const category = document.getElementById('category');\n  const cards = Array.from(document.querySelectorAll('#cards .card'))\n    .map(card => ({\n      el: card,\n      title: card.querySelector('.title').textContent.toLowerCase(),\n      phrase: card.querySelector('.muted').textContent.toLowerCase(),\n      category: card.querySelector('.badge').textContent.toLowerCase()\n    }));\n  function apply(){\n    const q = (search.value||'').toLowerCase().trim();\n    const c = (category.value||'').toLowerCase().trim();\n    cards.forEach(({el,title,phrase,category})=>{\n      const matchQ = !q || title.includes(q) || phrase.includes(q);\n      const matchC = !c || category === c;\n      el.style.display = (matchQ && matchC) ? '' : 'none';\n    });\n  }\n  search.addEventListener('input', apply);\n  category.addEventListener('change', apply);\n})();\n</script>`;
+	const script = `<script>\n(function(){\n  const search = document.getElementById('search');\n  const category = document.getElementById('category');\n  const cards = Array.from(document.querySelectorAll('#cards .card'))\n    .map(card => ({\n      el: card,\n      title: card.querySelector('.title').textContent.toLowerCase(),\n      phrase: card.querySelector('.muted').textContent.toLowerCase(),\n      category: card.querySelector('.badge').textContent.toLowerCase()\n    }));\n  function apply(){\n    const q = (search.value||'').toLowerCase().trim();\n    const c = (category.value||'').toLowerCase().trim();\n    cards.forEach(({el,title,phrase,category})=>{\n      const matchQ = !q || title.includes(q) || phrase.includes(q);\n      const matchC = !c || category === c;\n      el.style.display = (matchQ && matchC) ? '' : 'none';\n    });\n  }\n  search.addEventListener('input', apply);\n  category.addEventListener('change', apply);\n})();\n<\/script>`;
 	return baseLayout({ title, body: `${filterHtml}${cards}`, extraScript: script });
 }
 
 function lessonPage({ title, html, category }) {
-	const body = `<a class="back" href="/lessons/index.html">← Back to lessons</a>
+	const body = `<a class="back" href="${withBase('/lessons/index.html')}">← Back to lessons</a>
 <div class="pill">Category: ${category || 'General'}</div>
 <div class="content">${html}</div>`;
 	return baseLayout({ title, body });
@@ -138,10 +144,10 @@ function poemsIndexPage({ items }) {
 }
 
 function poemSlidePage({ title, lines }) {
-	const body = `<a class="back" href="/poems/index.html">← Back to poems</a>
+	const body = `<a class="back" href="${withBase('/poems/index.html')}">← Back to poems</a>
 <div class="center muted">Press <span class="kbd">Space</span> or click to advance</div>
 <div id="slide" class="slide"></div>`;
-	const script = `<script>\n(function(){\n  const lines = ${JSON.stringify(lines)};\n  let i = 0;\n  const el = document.getElementById('slide');\n  function render(){\n    if(i >= lines.length){ el.innerHTML = '<div class=\"muted\">End</div>'; return; }\n    const raw = lines[i];\n    const html = raw.replace(/\*\*([^*]+)\*\*/g, '<span class=\"poem-em\"><b>$1<\/b><\/span>');\n    el.innerHTML = '<div class=\"poem-line\">' + html + '<\/div>';\n  }\n  function advance(){ i = Math.min(i+1, lines.length); render(); }\n  function back(){ i = Math.max(i-1, 0); render(); }\n  document.addEventListener('click', advance);\n  document.addEventListener('keydown', (e)=>{\n    if(e.code==='Space' || e.key==='ArrowRight'){ e.preventDefault(); advance(); }\n    if(e.key==='ArrowLeft'){ e.preventDefault(); back(); }\n  });\n  render();\n})();\n</script>`;
+	const script = `<script>\n(function(){\n  const lines = ${JSON.stringify(lines)};\n  let i = 0;\n  const el = document.getElementById('slide');\n  function render(){\n    if(i >= lines.length){ el.innerHTML = '<div class=\"muted\">End</div>'; return; }\n    const raw = lines[i];\n    const html = raw.replace(/\\*\\*([^*]+)\\*\\*/g, '<span class=\"poem-em\"><b>$1<\\/b><\\/span>');\n    el.innerHTML = '<div class=\"poem-line\">' + html + '<\\/div>';\n  }\n  function advance(){ i = Math.min(i+1, lines.length); render(); }\n  function back(){ i = Math.max(i-1, 0); render(); }\n  document.addEventListener('click', advance);\n  document.addEventListener('keydown', (e)=>{\n    if(e.code==='Space' || e.key==='ArrowRight'){ e.preventDefault(); advance(); }\n    if(e.key==='ArrowLeft'){ e.preventDefault(); back(); }\n  });\n  render();\n})();\n<\/script>`;
 	return baseLayout({ title, body, extraScript: script });
 }
 
@@ -164,7 +170,7 @@ function build() {
 	});
 	const categories = Array.from(new Set(lessons.map((l) => l.category))).sort();
 	const lessonCards = lessons.map((l) => ({
-		href: `/lessons/${l.id}.html`,
+		href: withBase(`/lessons/${l.id}.html`),
 		title: l.title,
 		phrase: l.phrase,
 		category: l.category,
@@ -191,7 +197,7 @@ function build() {
 		return { id, title, lines };
 	});
 	const poemCards = poems.map((p) => ({
-		href: `/poems/${p.id}.html`,
+		href: withBase(`/poems/${p.id}.html`),
 		title: p.title,
 		phrase: `${p.lines.length} lines`,
 		category: 'Poem',
@@ -206,12 +212,12 @@ function build() {
 	const home = baseLayout({
 		title: 'Knowledge Garden',
 		body: `<div class="grid">
-  <a class="card" href="/lessons/index.html">
+  <a class="card" href="${withBase('/lessons/index.html')}">
     <div class="badge">Browse</div>
     <div class="title">Lessons</div>
     <div class="muted">Learn with concise principles</div>
   </a>
-  <a class="card" href="/poems/index.html">
+  <a class="card" href="${withBase('/poems/index.html')}">
     <div class="badge">Explore</div>
     <div class="title">Poems</div>
     <div class="muted">Dramatic line-by-line reading</div>
@@ -219,6 +225,15 @@ function build() {
 </div>`
 	});
 	writeFile(path.join(DIST_DIR, 'index.html'), home);
+
+	// Local preview server config (for `npx serve`): ensure /lessons and /poems resolve
+	const serveConfig = {
+		rewrites: [
+			{ source: '/lessons', destination: '/lessons/index.html' },
+			{ source: '/poems', destination: '/poems/index.html' }
+		]
+	};
+	writeFile(path.join(DIST_DIR, 'serve.json'), JSON.stringify(serveConfig, null, 2));
 
 	console.log('Built site to', DIST_DIR);
 }
